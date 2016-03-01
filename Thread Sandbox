@@ -1,0 +1,101 @@
+/**
+ * Created by jarednielson on 2/12/16.
+ */
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+
+/*
+**********************************
+*        THREADS SANDBOX         *
+**********************************
+ */
+
+
+//Threads are a programs path of execution. Most programs are written on a single thread which causes problems when
+//tasks need to occur at the same time. Using threads allows us to run multiple things at the same time.
+
+
+
+public class threadSand extends Thread {
+
+//The run method is what will execute when your subclass starts running
+    public void run() {
+        //Creates a for loop that loops to 100
+        for (int i = 0; i < 50; i++) {
+            //Prints out the number of the loop.
+            //The threadSand.currentThread().getId() assigns a number to the beginning so that you can see
+            //which item is ran from the different instances
+            //In this example myThread instance gets the number 10 put in front of it. AnotherThread will get the number 11
+            System.out.println(threadSand.currentThread().getId() + " Value: " + i);
+        }
+        try {
+            //The sleep method tells the thread to pause for the number of milliseconds input. In this case 250
+            //This must be put in a try catch block in order to work.
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) {
+
+        //Creates an instance of the threadSand class called myThread
+        threadSand myThread = new threadSand();
+
+        //Calling the start() method will create a thread that will call the run() method created used above.
+        myThread.start();
+
+        //Creates the second instance of threadSand called anotherThread
+        threadSand anotherThread = new threadSand();
+
+        //The second instance starts the run() method above and creates a thread to execute it.
+        anotherThread.start();
+
+
+
+
+        //Using Executors in threads.
+
+        Executor anExecutor = Executors.newCachedThreadPool();
+            for (int i = 0; i < 3; i++) {
+                RunThreadSand r1 = new RunThreadSand();
+                anExecutor.execute(r1);
+            }
+        try {
+            Thread.sleep(5000);
+
+            System.out.println("Thread is done sleeping");
+            for (int i = 0; i < 3; i++) {
+                RunThreadSand r2 = new RunThreadSand();
+                anExecutor.execute(r2);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        //NASTY PATH
+        //Using a null in the execute statement
+        Executor nastyExecutor = Executors.newCachedThreadPool();
+        for (int i = 0; i < 3; i++) {
+            RunThreadSand r1 = new RunThreadSand();
+            anExecutor.execute(r1);
+        }
+        try {
+            Thread.sleep(5000);
+
+            System.out.println("Thread is done sleeping");
+            for (int i = 0; i < 3; i++) {
+                RunThreadSand r3 = new RunThreadSand();
+                nastyExecutor.execute(null);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+}
