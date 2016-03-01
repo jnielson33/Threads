@@ -1,0 +1,57 @@
+/**
+ * Created by jarednielson on 2/14/16.
+ */
+
+
+//Creates a new class that implements Runnable. This allows it to use threads also
+public class RunThreadSand implements Runnable {
+
+    //Create the run method that has a for statement that loops to 500 and prints the values.
+    public void run() {
+        for(int j = 0; j < 100; j++){
+            //Displays the value and the ID of which thread is used
+            System.out.println("ID: " + Thread.currentThread().getName() + "   Value: " + j);
+        }
+
+        //Method that tells the threads to pause for 200 milliseconds
+        try {
+            Thread.currentThread().sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) {
+
+        //Creates a new instance of the Thread class and a new RunThreadSand called t1
+        Thread t1 = new Thread(new RunThreadSand());
+        //Runs the data in the run method
+        t1.start();
+
+        //Creates a second instance of the Thread class and RunThreadSand called t2
+        Thread t2 = new Thread(new RunThreadSand());
+        t2.start();
+
+        //Creates a third instance of the Thread class. But this time the runnable method is input into the main method
+        Thread t3 = new Thread(new Runnable() {
+
+            //Same information that was created in the RunThreadClass above but it is being created in the main method.
+            public void run() {
+                for(int k = 0; k < 20; k++){
+                    System.out.println("ID: " + Thread.currentThread().getName() + "   Value: " + k);
+                }
+
+                try {
+                    Thread.currentThread().sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        //Runs the runnable information created in the t3 instance if the Thread class
+        t3.start();
+
+    }
+}
