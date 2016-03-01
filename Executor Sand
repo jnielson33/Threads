@@ -1,0 +1,51 @@
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+/**
+ * Created by jarednielson on 2/24/16.
+ */
+
+
+public class threadSomething implements Runnable {
+
+
+    public void run() {
+        for(int i = 1000; i > 0; i--){
+            //Displays the value and the ID of which thread is used
+            System.out.println("ID: " + Thread.currentThread().getName() + "   Value: " + i);
+        }
+
+        //Method that tells the threads to pause for 200 milliseconds
+        try {
+            Thread.currentThread().sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    public static void main(String[] args) {
+
+        Executor anExecutor = Executors.newCachedThreadPool();
+        for (int i = 0; i < 1; i++) {
+            threadSomething aThread1 = new threadSomething();
+            anExecutor.execute(aThread1);
+        }
+        try {
+            Thread.sleep(5);
+
+
+            System.out.println("Second thread can start now");
+            for (int i = 0; i < 1; i++) {
+                threadSomething aThread2 = new threadSomething();
+                anExecutor.execute(aThread2);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+}
+
+}
