@@ -1,0 +1,63 @@
+/**
+ * Created by jarednielson on 2/25/16.
+ */
+
+
+//NASTY PATH
+
+/*************************
+ *   TESTING DEADLOCK
+ *************************
+ */
+
+public class testDeadlock {
+
+
+public static void main(String[] args) {
+
+    final String greeting1 = "Hello!";
+    final String greeting2 = "Goodbye!";
+
+
+
+    Thread t1 = new Thread() {
+
+        public void run() {
+
+            synchronized (greeting1) {
+                System.out.println("Thread1: " + greeting1);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (greeting2) {
+                    System.out.println("Thread1: " + greeting2);
+                }
+            }
+        }
+    };
+
+    Thread t2 = new Thread() {
+
+        public void run() {
+
+            synchronized (greeting2) {
+                System.out.println("Thread2: " + greeting2);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (greeting1) {
+                    System.out.println("Thread2: " + greeting1);
+                }
+            }
+        }
+    };
+    t1.start();
+    t2.start();
+}
+}
